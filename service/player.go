@@ -77,7 +77,7 @@ func (l *Player) handleTourneyList(ctx context.Context, msg proto.Message) (prot
 
 	// 从存储中获取tourney列表
 	sprotoTourneys, err := l.storage.ListTourneys(ctx, func(t *sproto.TourneyInfo) bool {
-		return t.GameType == req.GameType && t.MatchType == req.MatchType
+		return t.GameType == req.GameType
 	})
 	if err != nil {
 		return nil, err
@@ -86,13 +86,13 @@ func (l *Player) handleTourneyList(ctx context.Context, msg proto.Message) (prot
 	// convertTourneyInfo 将 sproto.TounreyInfo 转换为 cproto.TounreyInfo
 	convertTourneyInfo := func(src *sproto.TourneyInfo) *cproto.TounreyInfo {
 		return &cproto.TounreyInfo{
-			Id:        src.Id,
-			Name:      src.Name,
-			GameType:  src.GameType,
-			MatchType: src.MatchType,
-			Diamond:   src.Diamond,
-			Serverid:  src.Serverid,
-			Online:    src.Online,
+			Id:            src.Id,
+			Name:          src.Name,
+			GameType:      src.GameType,
+			MatchType:     src.MatchType,
+			SignCondition: src.SignCondition,
+			Serverid:      src.Serverid,
+			Online:        src.Online,
 		}
 	}
 

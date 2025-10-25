@@ -24,7 +24,7 @@ func NewRedisStorage(client *redis.Client) *RedisStorage {
 }
 
 func (s *RedisStorage) key(tourney *sproto.TourneyInfo) string {
-	return tourney.GameType + ":" + tourney.MatchType + ":" + string(tourney.Id)
+	return tourney.GameType + ":" + string(tourney.Id)
 }
 
 func (s *RedisStorage) UpdateTourney(ctx context.Context, tourney *sproto.TourneyInfo) error {
@@ -52,7 +52,7 @@ func (s *RedisStorage) ListTourneys(ctx context.Context, filter func(*sproto.Tou
 		// 获取一个示例tourney来构建更精确的key模式
 		sample := &sproto.TourneyInfo{}
 		if filter(sample) {
-			pattern = sample.GameType + ":" + sample.MatchType + ":*"
+			pattern = sample.GameType + ":*"
 		}
 	}
 
