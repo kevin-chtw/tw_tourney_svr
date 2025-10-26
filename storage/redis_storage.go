@@ -2,13 +2,14 @@ package storage
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
 
+	"github.com/kevin-chtw/tw_common/utils"
 	"github.com/kevin-chtw/tw_proto/sproto"
 	"github.com/redis/go-redis/v9"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type RedisStorage struct {
@@ -32,7 +33,7 @@ func (s *RedisStorage) UpdateTourney(ctx context.Context, tourney *sproto.Tourne
 		return errors.New("tourney info is nil")
 	}
 
-	data, err := json.Marshal(tourney)
+	data, err := utils.JsonMarshal.Marshal(tourney)
 	if err != nil {
 		return fmt.Errorf("marshal tourney failed: %w", err)
 	}
@@ -69,7 +70,7 @@ func (s *RedisStorage) ListTourneys(ctx context.Context, filter func(*sproto.Tou
 		}
 
 		var tourney sproto.TourneyInfo
-		if err := json.Unmarshal(data, &tourney); err != nil {
+		if err := protojson.Unmarshal(data, &tourney); err != nil {
 			continue
 		}
 
